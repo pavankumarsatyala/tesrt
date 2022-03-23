@@ -1,0 +1,61 @@
+pipeline {
+
+  environment {
+    PROJECT = "gopay-playground"
+    APP_NAME = "gceme"
+    FE_SVC_NAME = "${APP_NAME}-frontend"
+    CLUSTER = "jenkins-cd"
+    CLUSTER_ZONE = "us-east1-d"
+    IMAGE_TAG = "gcr.io/${PROJECT}/${APP_NAME}:${env.BRANCH_NAME}.${env.BUILD_NUMBER}"
+    JENKINS_CRED = "${PROJECT}"
+  }
+
+  agent {
+    kubernetes {
+      defaultContainer 'jnlp'
+      yaml """
+apiVersion: v1
+kind: Pod
+metadata:
+labels:
+  component: ci
+spec:
+  # Use service account that can deploy to all namespaces
+  containers:
+  - name: gcloud
+    image: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
+    command:
+    - cat
+    tty: true
+  - name: kubectl
+    image: asia.gcr.io/gopay-playground/helm-kubectl-gcloud
+    command:
+    - cat
+    tty: true
+"""
+}
+  }
+  stages {
+
+    stage('Build and push image with Container Builder') {
+      steps {
+        container('gcloud') {
+          sh "PYTHONUNBUFFERED=1 gcloud builds submit -t gcr.io/gopay-playground/testing111 ."
+        }
+      }
+    }
+
+    stage('deploy') {
+      steps {
+        container('kubectl') {
+             sh """        
+             gcloud container clusters get-credentials cluster-1 --zone us-central1-c --project gopay-playground
+             helm install sampleapp1 new
+             helm ls
+             """
+
+}
+}
+}
+}
+}
