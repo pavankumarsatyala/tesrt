@@ -47,19 +47,17 @@ spec:
       }
     }
 
-    stage(“deploy”) {
+    stage('deploy') {
       steps {
-        container(“kubectl”) {
-             sh  “””
-             helm ls
+        container('kubectl') {
+             sh """        
              gcloud container clusters get-credentials cluster-1 --zone us-central1-c --project gopay-playground
              helm install sampleapp1 new
              helm ls
-             “””
+             """
 
-
-  }
 }
 }
-  }
-  }
+}
+}
+}
