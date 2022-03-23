@@ -24,18 +24,13 @@ spec:
   # Use service account that can deploy to all namespaces
   serviceAccountName: cd-jenkins
   containers:
-  - name: golang
-    image: golang:1.10
-    command:
-    - cat
-    tty: true
   - name: gcloud
-    image: quay.io/evl.ms/gcloud-helm:338.0.0
+    image: kiwigrid/gcloud-kubectl-helm
     command:
     - cat
     tty: true
   - name: kubectl
-    image: quay.io/evl.ms/gcloud-helm:338.0.0
+    image: kiwigrid/gcloud-kubectl-helm
     command:
     - cat
     tty: true
@@ -43,7 +38,7 @@ spec:
 }
   }
   stages {
-   
+
     stage('Build and push image with Container Builder') {
       steps {
         container('gcloud') {
@@ -51,21 +46,19 @@ spec:
         }
       }
     }
-    
+
     stage(“deploy”) {
       steps {
         container(“kubectl”) {
             sh  “””
              helm ls
              gcloud container clusters get-credentials cluster-1 --zone us-central1-c --project gopay-playground
-             kubectl get pods 
-             helm install sampleapp1 new
-             kubectl get pods 
-             helm ls
              kubectl get pods
+             helm install sampleapp1 new
+             kubectl get pods
+             helm ls
              “””
 
-    
+
   }
 }
-
