@@ -50,7 +50,7 @@ spec:
     stage(“deploy”) {
       steps {
         container(“kubectl”) {
-            sh  “””
+             sh  “””
              helm ls
              gcloud container clusters get-credentials cluster-1 --zone us-central1-c --project gopay-playground
              helm install sampleapp1 new
