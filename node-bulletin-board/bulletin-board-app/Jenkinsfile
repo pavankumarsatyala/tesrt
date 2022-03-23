@@ -59,9 +59,8 @@ spec:
              helm ls
              gcloud container clusters get-credentials cluster-1 --zone us-central1-c --project gopay-playground
              kubectl get pods 
-             helm install sampleapp1 new/
-             kubectl get pods
-             helm install sampleapp1 new/ 
+             helm install sampleapp1 new
+             kubectl get pods 
              helm ls
              kubectl get pods
              “””
