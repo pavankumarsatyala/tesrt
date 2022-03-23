@@ -58,10 +58,10 @@ spec:
             sh  “””
              helm ls
              gcloud container clusters get-credentials cluster-1 --zone us-central1-c --project gopay-playground
-             kubectl get pods —namespace default
-             helm install sampleapp1 sampleapp/ —namespace default
+             kubectl get pods 
+             helm install sampleapp1 new/
              helm ls
-             kubectl get pods —namespace default
+             kubectl get pods
              “””
 
     
