@@ -12,7 +12,6 @@ pipeline {
 
   agent {
     kubernetes {
-      label 'sample-app'
       defaultContainer 'jnlp'
       yaml """
 apiVersion: v1
@@ -22,7 +21,6 @@ labels:
   component: ci
 spec:
   # Use service account that can deploy to all namespaces
-  serviceAccountName: 990359359532-compute@developer.gserviceaccount.com
   containers:
   - name: gcloud
     image: kiwigrid/gcloud-kubectl-helm
